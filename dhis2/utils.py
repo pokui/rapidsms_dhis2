@@ -37,8 +37,12 @@ dbname = db_config['NAME']
 dbuser = db_config['USER']
 dbpasswd = db_config['PASSWORD']
 
-conn = psycopg2.connect("dbname=" + dbname + " host= " + dbhost + " user=" + dbuser + " password=" + dbpasswd)
-cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+if ('test' in sys.argv):
+    con = True
+    cur = True
+else:
+    conn = psycopg2.connect("dbname=" + dbname + " host= " + dbhost + " user=" + dbuser + " password=" + dbpasswd)
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 http = Http()
 
@@ -225,6 +229,6 @@ def postXmlForSubmission(submission,orgunit,week):
     return postXml.replace('\n', '')
 
 #make some useful calls
-get_dhis_mtrack_field_mapping()
-
-conn.close()
+if  not ('test' in sys.argv):
+    get_dhis_mtrack_field_mapping()
+    conn.close()
